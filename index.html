@@ -1,1 +1,26 @@
-<h1>Family Law Case Bank</h1>
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Family Law Casebank</title>
+<style>
+  body{font-family:ui-sans-serif,system-ui,Arial;margin:24px}
+  table{border-collapse:collapse;width:100%}
+  th,td{border:1px solid #ddd;padding:8px}
+  th{background:#f7f7f7;text-align:left;position:sticky;top:0}
+  caption{margin-bottom:12px;font-weight:600;text-align:left}
+</style>
+<body>
+  <table id="t"><caption>Daily Table</caption><thead></thead><tbody></tbody></table>
+  <script>
+    (async function(){
+      const res = await fetch('./data/data.json', {cache:'no-store'});
+      const rows = await res.json();      // Expect: [ [headers...], [row1...], ... ]
+      if (!Array.isArray(rows) || rows.length === 0) return;
+      const [head, ...body] = rows;
+      const thead = document.querySelector('#t thead');
+      const tbody = document.querySelector('#t tbody');
+      thead.innerHTML = '<tr>' + head.map(h=>`<th>${String(h??'')}</th>`).join('') + '</tr>';
+      tbody.innerHTML = body.map(r => '<tr>' + r.map(c => `<td>${String(c??'')}</td>`).join('') + '</tr>').join('');
+    })();
+  </script>
+</body>
